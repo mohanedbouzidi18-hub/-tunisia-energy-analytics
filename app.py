@@ -66,23 +66,22 @@ else:
     border_color = "#58a6ff"      
 
 # 2. عرض الساعة مع شريط التقدم والحالة
-st.markdown(f"""
+st.markdown(
+    f"""
     <div style="text-align: center; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 15px; border: 2px solid {border_color}; margin-bottom: 25px;">
-        
         <div style="margin-bottom: 10px;">
             <h3 style="color: white; margin: 0;">🕒 {tunis_time.strftime("%H:%M")} | {tunis_time.strftime("%d %B %Y")}</h3>
         </div>
-
         <div style="width: 100%; height: 20px; background-color: #333; border-radius: 10px; overflow: hidden; margin-bottom: 10px;">
             <div style="width: {progress_value*100}%; height: 100%; background-color: {border_color}; transition: width 0.5s;"></div>
         </div>
-
         <div style="color: white; font-size: 1.1em;">
             الحالة: <strong style="color: {border_color};">{status_color} {status_text}</strong>
         </div>
-        
     </div>
-""", unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
 # القائمة الجانبية
 with st.sidebar:
