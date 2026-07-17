@@ -30,6 +30,33 @@ col_ctrl1, col_ctrl2, col_ctrl3 = st.columns(3)
 region = col_ctrl1.selectbox("🌍 المنطقة:", ['Tunis', 'Sousse', 'Mahdia', 'Sidi Bou Zid', 'Sfax'])
 temp = col_ctrl2.slider("🌡️ الحرارة (°C):", 20, 50, 30)
 hour = col_ctrl3.number_input("⏰ الساعة:", 0, 23)
+# --- PART 4: الرسوم البيانية المرتبطة بالزر ---
+# نضع زر التنبؤ في مكان واضح
+if st.button("🚀 تشغيل التنبؤ"):
+    # عند الضغط على الزر، نقوم بالحساب والعرض
+    prob = calculate_risk(temp, hour, region)
+    
+    # تحديث السجل
+    st.session_state.history.append({"الوقت": tunis_time.strftime("%H:%M"), "المنطقة": region, "الخطر": f"{prob:.2%}"})
+    
+    # عرض الرسوم البيانية فقط بعد الضغط على الزر
+    st.subheader("📈 تحليل التأثير الزمني للحرارة")
+    temps = np.linspace(20, 50, 30)
+    probs = [calculate_risk(t, hour, region) for t in temps]
+    df_area = pd.DataFrame({'Temperature': temps, 'Risk': probs})
+    
+    fig_area = px.area(df_area, x='Temperature', y='Risk', template="plotly_dark")
+    fig_area.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', height=350)
+    st.plotly_chart(fig_area, use_container_width=True)
+    
+    # عرض الـ Pie Chart أيضاً
+    st.subheader("📊 نسبة الخطر الحالية")
+    fig_pie = px.pie(values=[prob, 1-prob], names=['Risk', 'Stable'], hole=0.7, 
+                     color_discrete_map={'Risk': '#58a6ff', 'Stable': '#1a0a2e'})
+    fig_pie.update_layout(showlegend=False, paper_bgcolor='rgba(0,0,0,0)', height=300)
+    st.plotly_chart(fig_pie, use_container_width=True)
+else:
+    st.info("👈 اضغط على 'تشغيل التنبؤ' لرؤية النتائج والرسوم البيانية")
 # --- PART 3: التوقيت والحالة الذكية بالألوان ---
 tunis_time = datetime.utcnow() + timedelta(hours=1)
 current_hour = tunis_time.hour
@@ -96,3 +123,24 @@ st.markdown("""
     </ul>
 </div>
 """, unsafe_allow_html=True)
+# --- الجزء الخاص بـ الزر والسجل ---
+if st.button("🚀 تشغيل التنبؤ"):
+    # 1. الحساب
+    prob = calculate_risk(temp, hour, region)
+    
+    # 2. الحفظ في السجل (Session State)
+    # نقوم بإضافة النتيجة الجديدة إلى القائمة
+    new_entry = {"الوقت": tunis_time.strftime("%H:%M"), "المنطقة": region, "الخطر": f"{prob:.2%}"}
+    st.session_state.history.append(new_entry)
+    
+    # 3. عرض النتيجة فوراً
+    st.success(f"تم تسجيل التنبؤ بنجاح! الخطر الحالي: {prob:.2%}")
+
+# --- عرض الجدول في الأسفل (سيعرض السجل المحدث) ---
+st.subheader("📜 سجل التنبؤات الحديثة")
+if st.session_state.history:
+    # عرض آخر 5 تنبؤات
+    history_df = pd.DataFrame(st.session_state.history).tail(5)
+    st.dataframe(history_df, use_container_width=True)
+else:
+    st.write("لا يوجد تنبؤات سابقة.")
