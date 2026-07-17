@@ -50,7 +50,7 @@ current_hour = tunis_time.hour
 
 # 1. تحديد اللون والنص والحالة بناءً على الساعة
 if 14 <= current_hour < 16:
-    status_color = "🔴"           # أحمر
+    status_color = "🔴"          # أحمر
     status_text = "أغلب مقصوص"
     progress_value = 0.9          
     border_color = "#ff4b4b"      
