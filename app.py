@@ -43,10 +43,20 @@ st.markdown("<h1>⚡ TUNISIA ENERGY ANALYTICS ⚡</h1>", unsafe_allow_html=True)
 from datetime import datetime, timedelta
 
 # هذا السطر يضيف ساعة واحدة للتوقيت الحالي لتصحيح الفرق
+# التوقيت المباشر مع تغيير اللون تلقائياً
 tunis_time = datetime.utcnow() + timedelta(hours=1)
+current_hour = tunis_time.hour
+
+# تحديد اللون بناءً على الساعة
+if 14 <= current_hour < 16:
+    border_color = "#ff4b4b"  # أحمر
+elif (16 <= current_hour < 20) or (11 <= current_hour < 14):
+    border_color = "#ffa500"  # برتقالي
+else:
+    border_color = "#58a6ff"  # أزرق (اللون الافتراضي)
 
 st.markdown(f"""
-    <div style="text-align: center; padding: 10px; background: rgba(88, 166, 255, 0.1); border-radius: 10px; border: 1px solid #58a6ff; margin-bottom: 20px;">
+    <div style="text-align: center; padding: 10px; background: rgba(88, 166, 255, 0.1); border-radius: 10px; border: 2px solid {border_color}; margin-bottom: 20px;">
         <h3 style="color: white; margin: 0;">🕒 {tunis_time.strftime("%H:%M")} | {tunis_time.strftime("%d %B %Y")}</h3>
     </div>
 """, unsafe_allow_html=True)
