@@ -60,17 +60,7 @@ df_area = pd.DataFrame({'Temperature': temps, 'Risk': probs})
 fig_area = px.area(df_area, x='Temperature', y='Risk', template="plotly_dark")
 fig_area.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', height=350)
 st.plotly_chart(fig_area, use_container_width=True)
-col1, col2 = st.columns([1, 1])
-with col1:
-    st.subheader("📊 نسبة الخطر الحالية")
-    fig_pie = px.pie(values=[prob, 1-prob], names=['Risk', 'Stable'], hole=0.7, color_discrete_map={'Risk': '#58a6ff', 'Stable': '#1a0a2e'})
-    st.plotly_chart(fig_pie, use_container_width=True)
 
-with col2:
-    st.subheader("📜 سجل التنبؤات")
-    st.dataframe(pd.DataFrame(st.session_state.history).tail(5), use_container_width=True)
-
-st.write("---")
 # --- PART 5: التحليلات والأسباب التقنية ---
 st.subheader("💡 تحليل الأسباب التقنية لانقطاع التيار")
 st.markdown("""
