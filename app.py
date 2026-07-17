@@ -6,12 +6,10 @@ from datetime import datetime
 import random
 import requests
 
-# تحديد اللون حسب وقت اليوم
 current_hour = datetime.now().hour
-theme_color = "#1a0a2e" if (current_hour < 6 or current_hour >= 20) else "#0b0e14"
-
+theme = "#1a0a2e" if (current_hour < 6 or current_hour >= 20) else "#0b0e14"
 st.set_page_config(page_title="Tunisia Energy Pro", page_icon="⚡", layout="wide")
-st.markdown(f"""<style>.stApp {{ background: {theme_color}; color: white; }}</style>""", unsafe_allow_html=True)
+st.markdown(f"<style>.stApp {{ background: {theme}; color: white; }}</style>", unsafe_allow_html=True)
 if 'history' not in st.session_state: st.session_state.history = []
 API_KEY = "abcdea1d329150e0d98cee0fd38c3576"
 def get_live_temp(region):
@@ -28,17 +26,16 @@ def calculate_risk(temp, hour, region):
 st.title("⚡ TUNISIA ENERGY ANALYTICS ⚡")
 region = st.selectbox("🌍 المنطقة:", ['Tunis', 'Sousse', 'Mahdia', 'Sidi Bou Zid', 'Sfax'])
 live_temp = get_live_temp(region)
+safe_temp = float(max(20.0, min(50.0, live_temp)))
 col1, col2 = st.columns(2)
-temp = col1.slider("🌡️ الحرارة (°C):", 20, 50, float(max(20, min(50, live_temp))))
+temp = col1.slider("🌡️ الحرارة (°C):", 20.0, 50.0, safe_temp)
 hour = col2.number_input("⏰ الساعة:", 0, 23, value=datetime.now().hour)
 p_val = calculate_risk(temp, hour, region)
-# اللون يتغير حسب نسبة الخطر (أحمر، برتقالي، أزرق)
 status_color = "#ff4b4b" if p_val > 0.7 else ("#ffa500" if p_val > 0.4 else "#58a6ff")
-st.markdown(f"### الحالة: <span style='color:{status_color}'>{'خطر مرتفع' if p_val > 0.7 else 'عادي'}</span>", unsafe_allow_html=True)
+st.markdown(f"### الحالة: <span style='color:{status_color}'>{'حرج' if p_val > 0.7 else 'عادي'}</span>", unsafe_allow_html=True)
 st.progress(p_val)
 if st.button("🚀 تشغيل التنبؤ"):
     st.session_state.history.append({
-        "التاريخ": datetime.now().strftime("%d/%m"),
         "الوقت": datetime.now().strftime("%H:%M"),
         "المنطقة": region,
         "الخطر": f"{p_val:.2%}"
@@ -53,4 +50,8 @@ with col_b:
     st.subheader("📜 سجل التنبؤات")
 st.dataframe(pd.DataFrame(st.session_state.history).tail(5), use_container_width=True)
 st.subheader("⚠️ أسباب انقطاع الكهرباء")
-st.markdown("- **الإجهاد الحراري:** يسبب تمدد وتلف المحولات.\n- **ذروة الاستهلاك:** الضغط (14:00 - 18:00).\n- **صيانة الشبكة:** تدخلات فنية دورية.")
+st.markdown("""
+- **الإجهاد الحراري:** يؤدي لتمدد وتلف المحولات.
+- **ذروة الاستهلاك:** ضغط عالٍ جداً (14:00 - 18:00).
+- **صيانة الشبكة:** تدخلات فنية ضرورية لاستقرار النظام.
+""")
