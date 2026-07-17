@@ -21,11 +21,23 @@ c1, c2, c3 = st.columns(3)
 region = c1.selectbox("🌍 المنطقة:", ['Tunis', 'Sousse', 'Mahdia', 'Sidi Bou Zid', 'Sfax'])
 temp = c2.slider("🌡️ الحرارة (°C):", 20, 50, 30)
 hour = c3.number_input("⏰ الساعة:", 0, 23)
+# --- PART 4: زر التنبؤ والتحديث ---
+# يجب تعريف الوقت هنا داخل الزر أو قبل استخدامه لضمان توفره
 if st.button("🚀 تشغيل التنبؤ"):
+    # حساب الوقت اللحظي عند الضغط
+    current_time_now = datetime.utcnow() + timedelta(hours=1)
+    
+    # حساب الخطر
     prob = calculate_risk(temp, hour, region)
-    st.session_state.history.append({"الوقت": tunis_time.strftime("%H:%M"), "المنطقة": region, "الخطر": f"{prob:.2%}"})
+    
+    # حفظ النتيجة في السجل
+    st.session_state.history.append({
+        "الوقت": current_time_now.strftime("%H:%M"), 
+        "المنطقة": region, 
+        "الخطر": f"{prob:.2%}"
+    })
+    
     st.success(f"تم التنبؤ بنجاح! نسبة الخطر: {prob:.2%}")
-col_a, col_b = st.columns([2, 1])
 with col_a:
     st.subheader("📈 تحليل التأثير الزمني")
     temps = np.linspace(20, 50, 30)
