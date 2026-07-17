@@ -12,7 +12,7 @@ API_KEY = "abcdea1d329150e0d98cee0fd38c3576"
 # PART 2: دالة جلب الطقس الحقيقي
 def get_live_temp(region):
     # رابط API المجاني
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={region},TN&appid={API_KEY}&units=metric"
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={region},TN&appid={abcdea1d329150e0d98cee0fd38c3576}&units=metric"
     try:
         response = requests.get(url).json()
         return response['main']['temp']
