@@ -4,6 +4,20 @@ import numpy as np
 import plotly.express as px
 from datetime import datetime, timedelta
 import random
+import requests # لازم تزيد هذي
+
+API_KEY = "abcdea1d329150e0d98cee0fd38c3576"
+# PART 1: المكتبات
+
+# PART 2: دالة جلب الطقس الحقيقي
+def get_live_temp(region):
+    # رابط API المجاني
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={region},TN&appid={API_KEY}&units=metric"
+    try:
+        response = requests.get(url).json()
+        return response['main']['temp']
+    except:
+        return 30.0 # إذا حدث خطأ، سيعود لـ 30 درجة تلقائياً# لازم تسجل في موقعهم وتجيب API Key
 
 st.set_page_config(page_title="Tunisia Energy Pro", page_icon="⚡", layout="wide")
 st.markdown("""<style>.stApp { background: linear-gradient(135deg, #1a0a2e, #0b0e14); color: white; }
