@@ -4,6 +4,7 @@ import numpy as np
 import plotly.express as px
 from datetime import datetime
 import random
+st.set_page_config(layout="wide")
 
 # إعداد الصفحة
 st.set_page_config(page_title="Tunisia Energy Pro", page_icon="⚡", layout="wide")
