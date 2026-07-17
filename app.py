@@ -62,15 +62,37 @@ fig_area.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0
 st.plotly_chart(fig_area, use_container_width=True)
 
 # --- PART 5: التحليلات والأسباب التقنية ---
+# --- PART 5: نسبة الخطر والسجل ---
+col_pie, col_hist = st.columns([1, 1])
+
+with col_pie:
+    st.subheader("📊 نسبة الخطر الحالية")
+    # حساب الخطر الحالي بناءً على القيم المختارة
+    curr_prob = calculate_risk(temp, hour, region)
+    
+    # الرسم الدائري (الذي اختفى)
+    df_pie = pd.DataFrame({'Status': ['Risk', 'Stable'], 'Value': [curr_prob, 1-curr_prob]})
+    fig_pie = px.pie(df_pie, values='Value', names='Status', hole=0.7, 
+                     color_discrete_map={'Risk': '#58a6ff', 'Stable': '#1a0a2e'})
+    fig_pie.update_layout(showlegend=False, paper_bgcolor='rgba(0,0,0,0)', 
+                          plot_bgcolor='rgba(0,0,0,0)', height=300)
+    st.plotly_chart(fig_pie, use_container_width=True)
+
+with col_hist:
+    st.subheader("📜 سجل التنبؤات")
+    st.dataframe(pd.DataFrame(st.session_state.history).tail(5), use_container_width=True)
+
+# إضافة الأسباب التقنية كما طلبت
+st.write("---")
 st.subheader("💡 تحليل الأسباب التقنية لانقطاع التيار")
 st.markdown("""
 <div style="background-color: rgba(88, 166, 255, 0.05); padding: 20px; border-radius: 20px; border-left: 5px solid #58a6ff;">
     <ul style="list-style-type: none; padding-left: 0;">
-        <li style="margin-bottom: 12px;">🔹 <b>الإجهاد الحراري:</b> الارتفاع الكبير في درجات الحرارة يرفع حرارة الكابلات ويقلل من كفاءة نقل الطاقة.</li>
-        <li style="margin-bottom: 12px;">🔹 <b>ذروة الاستهلاك (Peak Load):</b> زيادة الطلب المتزامن على أجهزة التكييف بين الساعة 14:00 و 18:00 يرهق المحولات.</li>
-        <li style="margin-bottom: 12px;">🔹 <b>نقص سعة الشبكة:</b> عجز الشبكة الحالية عن استيعاب الأحمال العالية الناتجة عن التوسع العمراني.</li>
-        <li style="margin-bottom: 12px;">🔹 <b>التقلبات الجهدية:</b> عدم استقرار التردد (Frequency) بسبب التغير المفاجئ في الطلب على الكهرباء.</li>
-        <li style="margin-bottom: 12px;">🔹 <b>أعمال الصيانة الوقائية:</b> قطع التيار المبرمج لضمان سلامة المحولات ومنع الأعطال الكبرى.</li>
+        <li style="margin-bottom: 12px;">🔹 <b>الإجهاد الحراري:</b> الارتفاع الكبير في درجات الحرارة يرفع حرارة الكابلات.</li>
+        <li style="margin-bottom: 12px;">🔹 <b>ذروة الاستهلاك (Peak Load):</b> زيادة الطلب المتزامن بين 14:00 و 18:00.</li>
+        <li style="margin-bottom: 12px;">🔹 <b>نقص سعة الشبكة:</b> عجز الشبكة عن استيعاب الأحمال العالية.</li>
+        <li style="margin-bottom: 12px;">🔹 <b>التقلبات الجهدية:</b> عدم استقرار التردد بسبب تغير الطلب.</li>
+        <li style="margin-bottom: 12px;">🔹 <b>أعمال الصيانة الوقائية:</b> تدخلات ضرورية لسلامة المحولات.</li>
     </ul>
 </div>
 """, unsafe_allow_html=True)
