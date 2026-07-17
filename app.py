@@ -40,10 +40,14 @@ if 'history' not in st.session_state: st.session_state.history = []
 st.markdown("<h1>⚡ TUNISIA ENERGY ANALYTICS ⚡</h1>", unsafe_allow_html=True)
 
 # التوقيت المباشر
-current_hour = datetime.now().hour
+from datetime import datetime, timedelta
+
+# هذا السطر يضيف ساعة واحدة للتوقيت الحالي لتصحيح الفرق
+tunis_time = datetime.utcnow() + timedelta(hours=1)
+
 st.markdown(f"""
     <div style="text-align: center; padding: 10px; background: rgba(88, 166, 255, 0.1); border-radius: 10px; border: 1px solid #58a6ff; margin-bottom: 20px;">
-        <h3 style="color: white; margin: 0;">🕒 {datetime.now().strftime("%H:%M")} | {datetime.now().strftime("%d %B %Y")}</h3>
+        <h3 style="color: white; margin: 0;">🕒 {tunis_time.strftime("%H:%M")} | {tunis_time.strftime("%d %B %Y")}</h3>
     </div>
 """, unsafe_allow_html=True)
 
