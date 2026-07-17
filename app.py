@@ -44,20 +44,43 @@ from datetime import datetime, timedelta
 
 # هذا السطر يضيف ساعة واحدة للتوقيت الحالي لتصحيح الفرق
 # التوقيت المباشر مع تغيير اللون تلقائياً
+# --- حساب الوقت والحالة الذكية ---
 tunis_time = datetime.utcnow() + timedelta(hours=1)
 current_hour = tunis_time.hour
 
-# تحديد اللون بناءً على الساعة
+# 1. تحديد اللون والنص والحالة بناءً على الساعة
 if 14 <= current_hour < 16:
-    border_color = "#ff4b4b"  # أحمر
+    status_color = "🔴"           # أحمر
+    status_text = "أغلب مقصوص"
+    progress_value = 0.9          
+    border_color = "#ff4b4b"      
 elif (16 <= current_hour < 20) or (11 <= current_hour < 14):
-    border_color = "#ffa500"  # برتقالي
+    status_color = "🟠"           # برتقالي
+    status_text = "عادي"
+    progress_value = 0.5          
+    border_color = "#ffa500"      
 else:
-    border_color = "#58a6ff"  # أزرق (اللون الافتراضي)
+    status_color = "🟢"           # أخضر (للحالة المستقرة)
+    status_text = "نسبة قليلة"
+    progress_value = 0.1          
+    border_color = "#58a6ff"      
 
+# 2. عرض الساعة مع شريط التقدم والحالة
 st.markdown(f"""
-    <div style="text-align: center; padding: 10px; background: rgba(88, 166, 255, 0.1); border-radius: 10px; border: 2px solid {border_color}; margin-bottom: 20px;">
-        <h3 style="color: white; margin: 0;">🕒 {tunis_time.strftime("%H:%M")} | {tunis_time.strftime("%d %B %Y")}</h3>
+    <div style="text-align: center; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 15px; border: 2px solid {border_color}; margin-bottom: 25px;">
+        
+        <div style="margin-bottom: 10px;">
+            <h3 style="color: white; margin: 0;">🕒 {tunis_time.strftime("%H:%M")} | {tunis_time.strftime("%d %B %Y")}</h3>
+        </div>
+
+        <div style="width: 100%; height: 20px; background-color: #333; border-radius: 10px; overflow: hidden; margin-bottom: 10px;">
+            <div style="width: {progress_value*100}%; height: 100%; background-color: {border_color}; transition: width 0.5s;"></div>
+        </div>
+
+        <div style="color: white; font-size: 1.1em;">
+            الحالة: <strong style="color: {border_color};">{status_color} {status_text}</strong>
+        </div>
+        
     </div>
 """, unsafe_allow_html=True)
 
