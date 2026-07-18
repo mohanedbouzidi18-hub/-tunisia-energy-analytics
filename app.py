@@ -26,6 +26,25 @@ def calculate_risk(temp, hour, region):
 st.title("⚡ TUNISIA ENERGY ANALYTICS ⚡")
 region = st.selectbox("🌍 المنطقة:", ['Tunis', 'Sousse', 'Mahdia', 'Sidi Bou Zid', 'Sfax'])
 live_temp = get_live_temp(region)
+# تحديد اللون بناءً على درجة الحرارة الحالية
+if 45 <= live_temp <= 50:
+    btn_color = "#ff4b4b"  # أحمر
+    status_text = "حالة حرارية قصوى"
+elif 35 <= live_temp <= 44:
+    btn_color = "#ffa500"  # برتقالي
+    status_text = "حالة حرارية معتدلة"
+else:
+    btn_color = "#58a6ff"  # أزرق
+    status_text = "حالة حرارية طبيعية"
+
+# عرض الزر التفاعلي
+st.markdown(f"""
+    <div style="background-color: {btn_color}; padding: 15px; border-radius: 10px; text-align: center; color: white; font-weight: bold;">
+        🌡️ الحرارة: {live_temp:.1f}°C | 🕒 الوقت: {datetime.now().strftime('%H:%M')} | 📅 التاريخ: {datetime.now().strftime('%d/%m/%Y')}
+        <br> {status_text}
+    </div>
+""", unsafe_allow_html=True)
+st.write("") # مسافة إضافية
 safe_temp = float(max(20.0, min(50.0, live_temp)))
 col1, col2 = st.columns(2)
 temp = col1.slider("🌡️ الحرارة (°C):", 20.0, 50.0, safe_temp)
