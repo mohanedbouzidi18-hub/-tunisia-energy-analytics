@@ -24,9 +24,9 @@ def calculate_risk(temp, hour):
 
 # PART 3: تهيئة البيانات والولاية
 tunisia_states = ["Ariana", "Beja", "Ben Arous", "Bizerte", "Gabes", "Gafsa", "Jendouba", "Kairouan", "Kasserine", "Kebili", "Kef", "Mahdia", "Manouba", "Medenine", "Monastir", "Nabeul", "Sfax", "Sidi Bou Zid", "Siliana", "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"]
-region = st.sidebar.selectbox("🌍 اختر الولاية:", tunisia_states)
+region = st.selectbox("🌍 اختر الولاية:", tunisia_states)
 live_temp = get_live_temp(region)
-current_time = datetime.now() - timedelta(hours=1)
+current_time = datetime.now() + timedelta(hours=1)
 
 # PART 4: الصناديق الثلاثة في الأعلى (مع تغيير لون الحرارة)
 if 45 <= live_temp <= 55: box_color = "#ff4b4b"
