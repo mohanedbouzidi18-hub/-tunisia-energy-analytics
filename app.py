@@ -19,33 +19,33 @@ def get_live_temp(region):
     except: return 30.0
 tunisia_states = ["Ariana", "Beja", "Ben Arous", "Bizerte", "Gabes", "Gafsa", "Jendouba", "Kairouan", "Kasserine", "Kebili", "Kef", "Mahdia", "Manouba", "Medenine", "Monastir", "Nabeul", "Sfax", "Sidi Bou Zid", "Siliana", "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"]
 
-def calculate_risk(temp, hour, region):
+def calculate_risk(temp, hour):
     heat = (temp - 20) * 0.02
     peak = 0.3 if 14 <= hour <= 18 else 0
     return min(max(0.1 + heat + peak + random.uniform(-0.02, 0.02), 0.05), 0.95)
 st.markdown("<p class='big-font'>⚡ TUNISIA ENERGY ANALYTICS ⚡</p>", unsafe_allow_html=True)
 region = st.selectbox("🌍 اختر الولاية:", tunisia_states)
 live_temp = get_live_temp(region)
-current_time = datetime.now() - timedelta(hours=1)
-if 45 <= live_temp <= 50: box_style = "background-color: #ff0000; color: white;" 
-elif 35 <= live_temp <= 44: box_style = "background-color: #ff8c00; color: white;"
-else: box_style = "background-color: #1e90ff; color: white;"
-
-st.markdown(f"""<div class='status-box' style='{box_style}'>
-    🌡️ الحرارة: {live_temp:.1f}°C | 🕒 الوقت: {current_time.strftime('%H:%M')} | 📅 التاريخ: {current_time.strftime('%d/%m/%Y')}
-</div>""", unsafe_allow_html=True)
+st.markdown("<p class='big-font'>⚡ TUNISIA ENERGY ANALYTICS ⚡</p>", unsafe_allow_html=True)
+region = st.selectbox("🌍 اختر الولاية:", tunisia_states)
+live_temp = get_live_temp(region)
 col1, col2 = st.columns(2)
 temp = col1.slider("🌡️ الحرارة المعدلة:", 20.0, 50.0, float(max(20.0, min(50.0, live_temp))))
 hour = col2.number_input("⏰ الساعة:", 0, 23, value=current_time.hour)
-p_val = calculate_risk(temp, hour, region)
+p_val = calculate_risk(temp, hour)
+status_color = "#ff4b4b" if p_val > 0.7 else ("#ffa500" if p_val > 0.4 else "#58a6ff")
 st.write(f"### نسبة الخطر المتوقعة: {p_val:.2%}")
 st.progress(p_val)
 if st.button("🚀 تشغيل التنبؤ"):
     st.session_state.history.append({"الوقت": current_time.strftime("%H:%M"), "الولاية": region, "الخطر": f"{p_val:.2%}"})
     st.success("تم الحفظ!")
-status_color = "#ff4b4b" if p_val > 0.7 else ("#ffa500" if p_val > 0.4 else "#58a6ff")
-st.plotly_chart(px.pie(values=[p_val, 1-p_val], names=['Risk', 'Stable'], hole=0.7, 
-                color_discrete_sequence=[status_color, "#333"]), use_container_width=True)
+col_a, col_b = st.columns(2)
+with col_a:
+    df = pd.DataFrame({'T': np.linspace(20, 50, 20), 'R': [calculate_risk(t, hour) for t in np.linspace(20, 50, 20)]})
+    st.plotly_chart(px.area(df, x='T', y='R', template="plotly_dark", title="تطور الخطر حسب الحرارة"), use_container_width=True)
+with col_b:
+    st.plotly_chart(px.pie(values=[p_val, 1-p_val], names=['خطر', 'استقرار'], hole=0.7, 
+                    color_discrete_sequence=[status_color, "#333"], title="مؤشر الحالة الحالي"), use_container_width=True)
 st.subheader("📜 سجل التنبؤات")
 st.dataframe(pd.DataFrame(st.session_state.history).tail(5), use_container_width=True)
 st.subheader("⚠️ أسباب انقطاع الكهرباء")
