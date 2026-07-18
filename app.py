@@ -5,6 +5,12 @@ import plotly.express as px
 from datetime import datetime
 import random
 import requests
+# --- إضافة في PART 1 ---
+st.markdown("""<style>
+    .big-font { font-size:32px !important; font-weight: bold; color: #58a6ff; }
+    .status-box { padding: 20px; border-radius: 15px; text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+    .stButton>button { font-size: 20px !important; height: 3em; width: 100%; }
+</style>""", unsafe_allow_html=True)
 
 current_hour = datetime.now().hour
 theme = "#1a0a2e" if (current_hour < 6 or current_hour >= 20) else "#0b0e14"
