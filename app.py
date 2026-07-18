@@ -23,11 +23,8 @@ def calculate_risk(temp, hour):
     heat = (temp - 20) * 0.02
     peak = 0.3 if 14 <= hour <= 18 else 0
     return min(max(0.1 + heat + peak + random.uniform(-0.02, 0.02), 0.05), 0.95)
-st.markdown("<p class='big-font'>⚡ TUNISIA ENERGY ANALYTICS ⚡</p>", unsafe_allow_html=True)
-region = st.selectbox("🌍 اختر الولاية:", tunisia_states)
-live_temp = get_live_temp(region)
 # --- 3 صناديق منفصلة (حرارة، وقت، تاريخ) ---
-current_time = datetime.now() - timedelta(hours=1)
+current_time = datetime.now() + timedelta(hours=1)
 
 col_a, col_b, col_c = st.columns(3)
 
@@ -56,6 +53,9 @@ with col_c:
     """, unsafe_allow_html=True)
 
 st.write("") # مسافة إضافية
+st.markdown("<p class='big-font'>⚡ TUNISIA ENERGY ANALYTICS ⚡</p>", unsafe_allow_html=True)
+region = st.selectbox("🌍 اختر الولاية:", tunisia_states)
+live_temp = get_live_temp(region)
 col1, col2 = st.columns(2)
 temp = col1.slider("🌡️ الحرارة المعدلة:", 20.0, 50.0, float(max(20.0, min(50.0, live_temp))))
 hour = col2.number_input("⏰ الساعة:", 0, 23, value=current_time.hour)
