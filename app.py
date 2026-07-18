@@ -29,35 +29,37 @@ def calculate_risk(temp, hour):
 st.write("") # مسافة إضافية
 st.markdown("<p class='big-font'>⚡ TUNISIA ENERGY ANALYTICS ⚡</p>", unsafe_allow_html=True)
 region = st.selectbox("🌍 اختر الولاية:", tunisia_states)
+live_temp = get_live_temp(region)
 # --- 3 صناديق منفصلة (حرارة، وقت، تاريخ) ---
-current_time = datetime.now() + timedelta(hours=1)
+current_time = datetime.now() - timedelta(hours=1)
 
-# تأكد أن هذا الجزء كله داخل دالة واحدة
 col_a, col_b, col_c = st.columns(3)
 
+# صندوق الحرارة
 with col_a:
     st.markdown(f"""
-        <div style="background-color: #1e90ff; padding: 15px; border-radius: 10px; text-align: center; color: white; font-weight: bold;">
+        <div style="background-color: #1e90ff; padding: 20px; border-radius: 10px; text-align: center; color: white; font-weight: bold; font-size: 18px;">
             🌡️ الحرارة: {live_temp:.1f}°C
         </div>
     """, unsafe_allow_html=True)
 
+# صندوق الوقت
 with col_b:
     st.markdown(f"""
-        <div style="background-color: #1e90ff; padding: 15px; border-radius: 10px; text-align: center; color: white; font-weight: bold;">
+        <div style="background-color: #1e90ff; padding: 20px; border-radius: 10px; text-align: center; color: white; font-weight: bold; font-size: 18px;">
             🕒 الوقت: {current_time.strftime('%H:%M')}
         </div>
     """, unsafe_allow_html=True)
 
+# صندوق التاريخ
 with col_c:
     st.markdown(f"""
-        <div style="background-color: #1e90ff; padding: 15px; border-radius: 10px; text-align: center; color: white; font-weight: bold;">
+        <div style="background-color: #1e90ff; padding: 20px; border-radius: 10px; text-align: center; color: white; font-weight: bold; font-size: 18px;">
             📅 التاريخ: {current_time.strftime('%d/%m/%Y')}
         </div>
     """, unsafe_allow_html=True)
 
 st.write("") # مسافة إضافية
-live_temp = get_live_temp(region)
 col1, col2 = st.columns(2)
 temp = col1.slider("🌡️ الحرارة المعدلة:", 20.0, 50.0, float(max(20.0, min(50.0, live_temp))))
 hour = col2.number_input("⏰ الساعة:", 0, 23, value=current_time.hour)
