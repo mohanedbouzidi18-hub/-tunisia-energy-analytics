@@ -46,7 +46,7 @@ else:
 
 with col_a:
     st.markdown(f"""
-        <div style="background-color: {box_color}; padding: 15px; border-radius: 10px; text-align: center; color: white; font-weight: bold; font-size: 18px;">
+        <div style="background-color: {box_color}; padding: 15px; border-radius: 10px; text-align: center; color: white; font-weight: bold;">
             🌡️ الحرارة: {live_temp:.1f}°C
         </div>
     """, unsafe_allow_html=True)
