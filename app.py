@@ -23,8 +23,18 @@ def calculate_risk(temp, hour, region):
     heat = (temp - 20) * 0.02
     peak = 0.3 if 14 <= hour <= 18 else 0
     return min(max(weights.get(region, 0.05) + heat + peak + random.uniform(-0.02, 0.02), 0.05), 0.95)
+# 4. الواجهة والولايات الـ 24
 st.title("⚡ TUNISIA ENERGY ANALYTICS ⚡")
-region = st.selectbox("🌍 المنطقة:", ['Tunis', 'Sousse', 'Mahdia', 'Sidi Bou Zid', 'Sfax'])
+
+# قائمة الولايات الـ 24
+tunisia_states = [
+    "Ariana", "Beja", "Ben Arous", "Bizerte", "Gabes", "Gafsa", "Jendouba", 
+    "Kairouan", "Kasserine", "Kebili", "Kef", "Mahdia", "Manouba", "Medenine", 
+    "Monastir", "Nabeul", "Sfax", "Sidi Bou Zid", "Siliana", "Sousse", 
+    "Tataouine", "Tozeur", "Tunis", "Zaghouan"
+]
+
+region = st.selectbox("🌍 اختر الولاية:", tunisia_states)
 live_temp = get_live_temp(region)
 # تحديد اللون بناءً على درجة الحرارة الحالية
 if 45 <= live_temp <= 50:
