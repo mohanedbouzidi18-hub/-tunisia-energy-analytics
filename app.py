@@ -32,28 +32,26 @@ region = st.selectbox("🌍 اختر الولاية:", tunisia_states)
 # --- 3 صناديق منفصلة (حرارة، وقت، تاريخ) ---
 current_time = datetime.now() + timedelta(hours=1)
 
+# تأكد أن هذا الجزء كله داخل دالة واحدة
 col_a, col_b, col_c = st.columns(3)
 
-# صندوق الحرارة
 with col_a:
     st.markdown(f"""
-        <div style="background-color: #1e90ff; padding: 20px; border-radius: 10px; text-align: center; color: white; font-weight: bold; font-size: 18px;">
+        <div style="background-color: #1e90ff; padding: 15px; border-radius: 10px; text-align: center; color: white; font-weight: bold;">
             🌡️ الحرارة: {live_temp:.1f}°C
         </div>
     """, unsafe_allow_html=True)
 
-# صندوق الوقت
 with col_b:
     st.markdown(f"""
-        <div style="background-color: #1e90ff; padding: 20px; border-radius: 10px; text-align: center; color: white; font-weight: bold; font-size: 18px;">
+        <div style="background-color: #1e90ff; padding: 15px; border-radius: 10px; text-align: center; color: white; font-weight: bold;">
             🕒 الوقت: {current_time.strftime('%H:%M')}
         </div>
     """, unsafe_allow_html=True)
 
-# صندوق التاريخ
 with col_c:
     st.markdown(f"""
-        <div style="background-color: #1e90ff; padding: 20px; border-radius: 10px; text-align: center; color: white; font-weight: bold; font-size: 18px;">
+        <div style="background-color: #1e90ff; padding: 15px; border-radius: 10px; text-align: center; color: white; font-weight: bold;">
             📅 التاريخ: {current_time.strftime('%d/%m/%Y')}
         </div>
     """, unsafe_allow_html=True)
