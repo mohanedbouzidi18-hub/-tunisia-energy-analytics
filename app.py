@@ -26,7 +26,7 @@ def calculate_risk(temp, hour):
 st.markdown("<p class='big-font'>⚡ TUNISIA ENERGY ANALYTICS ⚡</p>", unsafe_allow_html=True)
 region = st.selectbox("🌍 اختر الولاية:", tunisia_states)
 live_temp = get_live_temp(region)
-col1, col2 = st.columns(2)
+col1, col2 = st.columns(4)
 temp = col1.slider("🌡️ الحرارة المعدلة:", 20.0, 50.0, float(max(20.0, min(50.0, live_temp))))
 hour = col2.number_input("⏰ الساعة:", 0, 23, value=current_time.hour)
 p_val = calculate_risk(temp, hour)
