@@ -31,14 +31,22 @@ st.markdown("<p class='big-font'>⚡ TUNISIA ENERGY ANALYTICS ⚡</p>", unsafe_a
 region = st.selectbox("🌍 اختر الولاية:", tunisia_states)
 live_temp = get_live_temp(region)
 # --- 3 صناديق منفصلة (حرارة، وقت، تاريخ) ---
-current_time = datetime.now() - timedelta(hours=1)
+current_time = datetime.now() + timedelta(hours=1)
 
 col_a, col_b, col_c = st.columns(3)
 
 # صندوق الحرارة
+# تحديد اللون حسب الحرارة
+if 45 <= live_temp <= 55:
+    box_color = "#ff4b4b"  # أحمر
+elif 35 <= live_temp <= 44:
+    box_color = "#ffa500"  # برتقالي
+else:
+    box_color = "#28a745"  # أخضر (في حالة كانت أقل من 35)
+
 with col_a:
     st.markdown(f"""
-        <div style="background-color: #1e90ff; padding: 20px; border-radius: 10px; text-align: center; color: white; font-weight: bold; font-size: 18px;">
+        <div style="background-color: {box_color}; padding: 15px; border-radius: 10px; text-align: center; color: white; font-weight: bold; font-size: 18px;">
             🌡️ الحرارة: {live_temp:.1f}°C
         </div>
     """, unsafe_allow_html=True)
