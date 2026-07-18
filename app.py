@@ -53,5 +53,32 @@ with col_b:
                     color_discrete_sequence=[status_color, "#333"], title="مؤشر الحالة الحالي"), use_container_width=True)
 st.subheader("📜 سجل التنبؤات")
 st.dataframe(pd.DataFrame(st.session_state.history).tail(5), use_container_width=True)
-st.subheader("⚠️ أسباب انقطاع الكهرباء")
-st.markdown("- **الإجهاد الحراري:** تلف المحولات.\n- **ذروة الاستهلاك:** الضغط (14:00-18:00).\n- **صيانة الشبكة:** تدخلات دورية.")
+st.subheader("⚠️ الأسباب التقنية المؤدية لقطع الكهرباء")
+
+# تصميم بطاقات الأسباب بشكل احترافي ومقروء
+st.markdown("""
+<div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
+    
+    <div style="flex: 1; min-width: 250px; background-color: #1e1e2f; padding: 20px; border-radius: 12px; border-right: 5px solid #ff4b4b;">
+        <h4 style="color: #ff4b4b; margin-top: 0;">🔥 الإجهاد الحراري للمحولات</h4>
+        <p style="color: #cfcfdf; font-size: 15px; line-height: 1.6;">
+            الارتفاع المفرط في درجات الحرارة يؤدي إلى تمدد الزيوت العازلة داخل المحولات، مما قد يسبب تلفاً للمكونات الداخلية للشبكة.
+        </p>
+    </div>
+    
+    <div style="flex: 1; min-width: 250px; background-color: #1e1e2f; padding: 20px; border-radius: 12px; border-right: 5px solid #ffa500;">
+        <h4 style="color: #ffa500; margin-top: 0;">⚡ ذروة الاستهلاك اليومي</h4>
+        <p style="color: #cfcfdf; font-size: 15px; line-height: 1.6;">
+            يحدث ضغط هائل على المولدات خلال ساعات الذروة (خاصة من الساعة 14:00 إلى 18:00) بسبب التشغيل المكثف لأجهزة التكييف.
+        </p>
+    </div>
+    
+    <div style="flex: 1; min-width: 250px; background-color: #1e1e2f; padding: 20px; border-radius: 12px; border-right: 5px solid #58a6ff;">
+        <h4 style="color: #58a6ff; margin-top: 0;">🛠️ أعمال الصيانة الطارئة</h4>
+        <p style="color: #cfcfdf; font-size: 15px; line-height: 1.6;">
+            تقوم الفرق الفنية بقطع التيار بشكل جزئي ومؤقت لحماية الشبكة من الانهيار الكامل وتخفيف الأحمال الزائدة عن المناطق الحرجّة.
+        </p>
+    </div>
+    
+</div>
+""", unsafe_allow_html=True)
